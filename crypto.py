@@ -31,8 +31,8 @@ def DES(filename=None,key_file=None,action="encrypt"):
         while temp != b"":
             temp = x.read(); key.append(temp)
     # do weird binary stuff - dunno how it even got working
-    theKey = key[0]
-    if theKey[-1] == '\n': theKey = theKey[:-1]
+    theKey = key[0];
+    if theKey[-1] == 10: theKey = theKey[:-1]
     # check correct key length
     if (len(theKey) != 8):
         print(theKey)
@@ -46,12 +46,14 @@ def DES(filename=None,key_file=None,action="encrypt"):
         while temp != b"":
             temp = x.read(2); b.append(temp)
     # *** ENCRYPT ***
+    bts = []    # the actual encoded thing
     if (action=="encrypt"):
         print("ENCRYPTING")
         for i in range(0,8):
             cnt = 0
             while b[cnt] != b"":
                 b[cnt] = h.encode(b[cnt],theKey[i])
+                if i == 7: bts = bts+b[cnt]
                 cnt = cnt+1
     # *** DECRYPT ***
     else:
@@ -60,12 +62,9 @@ def DES(filename=None,key_file=None,action="encrypt"):
             cnt = 0
             while b[cnt] != b"":
                 b[cnt] = h.decode(b[cnt],theKey[7-i])
+                if i == 7: bts = bts+b[cnt]
                 cnt = cnt+1
-    # ** SAVE TO FILE ENCRYPTED **
-    f1 = open("encrypted",'wb')
-    b = ''.join(b)  #convert to string
-    f1.write(b)
-    f1.close()
+    return [bts,key]
 
 ##############################################
 
