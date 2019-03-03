@@ -1,14 +1,15 @@
-import crypto as c, socket
+import crypto as c, socket, datetime, sys
 
-def server(port,keyfile=None):
-	# INIT SOCKET
-	s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-	s.bind(('',port)
+port = sys(argv[1])
 
-	# LISTEN
-	while True:
-		msg,addr = s.recvfrom(1024)
-		msg = msg.upper()
-		# concat in msg timestamp!
-		s.sento(msg,addr)
-		s.close()	# is this necessary?
+# INIT SOCKET
+s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+s.bind(('',port))
+
+# LISTEN
+while True:
+	msg,addr = s.recvfrom(1024)
+	msg = c.decrypt(msg)
+	stamp = datetime.datetime.now()
+	s.sento(stamp+msg,addr)
+
