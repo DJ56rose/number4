@@ -1,31 +1,34 @@
-import crypto as c
-import datetime, sys, socket, os.path
+import crypto as c, socket, datetime, sys
 
-IP = sys.argv[1]
-port = int(sys.argv[2])
-filename = sys.argv[3]
+IP = sys(argv[1])
+port = sys(argv[2])
+filename = sys(argv[3])
 
 # ERROR CHECKING
-if not os.path.isfile(filename):
-    print("Error: the file " + filename + " DNE")
-    exit()
+kf = "keyfile.txt"
+try: kf = open("keyfile.txt","rb")
+except:
+	print("Error: create keyfile.txt")
+	return None
+try: fn = open(filename,"wb")
+except:
+	print("Error: " + filename + " does not exist")
+	return None
 IPnums = IP.split('.')
 if len(IPnums) != 4:
 	print("Error: Incorrect IP format")
-	exit()
+	return None
 
 # ENCRYPT
-coded = bytes(c.DES(filename))
+coded = c.DES(filename,"wb")
 
 # "SOCKET PROGRAMMING"
 s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 addr = (IP,port)
-print("addr"); print(addr)
 s.sendto(coded, addr)
 
-print("receiving shit...")
 msg = s.recvfrom(1024)
-print("creating stamp")
 stamp = datetime.datetime.now()
-print(msg)
-s.close()
+print(msg+stamp)
+s.close()	
+	
