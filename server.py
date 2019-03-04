@@ -11,10 +11,7 @@ s.bind(('',port))
 # LISTEN
 while True:
 	msg,addr = s.recvfrom(1024)
-    msgByte = bytearray(msg)
-    tempFile = open("temp","wb")
-    tempFile.write(msgByte)
-    print(msg)
-	msg = c.DES("temp")
+    print("type of msg is " + str(type(msg)))
+	toSend = bytearray(c.DES(msg))
 	stamp = datetime.datetime.now()
-	s.sendto(stamp+msg,addr)
+	s.sendto(toSend,addr)

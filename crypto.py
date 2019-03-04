@@ -6,11 +6,14 @@ def DES(filename,action="encrypt"):
 
     # ***** ENCRYPTION AND DECRYPTION *****
     b = []  # bytes in file
-    f = open(filename,"rb")
-    with f as x:
-        temp = x.read(2); b.append(temp)
-        while temp != b"":
+    if isinstance(filename,str):
+        f = open(filename,"rb")
+        with f as x:
             temp = x.read(2); b.append(temp)
+            while temp != b"":
+                temp = x.read(2); b.append(temp)
+    else: b = filename
+    # then need to group the shit together
     # *** ENCRYPT ***
     bts = []    # the actual encoded thing
     if (action=="encrypt"):
@@ -27,7 +30,7 @@ def DES(filename,action="encrypt"):
         for i in range(0,8):
             cnt = 0
             while b[cnt] != b"":
-                b[cnt] = h.decoder(b[cnt],theKey[7-i])
+                b[cnt] = h.decoder(b[cnt],ord(theKey[7-i]))
                 if i == 7: bts = bts+b[cnt]
                 cnt = cnt+1
     return bts
