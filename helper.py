@@ -7,6 +7,8 @@ def encoder(bits,key):
         bits.append(32)   #append space
     bits[0],bits[1] = bits[1],bits[0]
     # XOR with key
+    if isinstance(bits[1],str):
+        bits[1] = ord(bits[1])
     bits[1] = bits[1]^key
     # Return
     return bits
